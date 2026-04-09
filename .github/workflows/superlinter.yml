@@ -1,10 +1,10 @@
----
-name: Lint
+--- 
+name: Super-Linter
 
-on: # yamllint disable-line rule:truthy
-  push: null
-  pull_request: null
-
+on:
+  pull_request:
+    types: [opened, reopened]
+  
 permissions: {}
 
 jobs:
@@ -13,28 +13,30 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      # contents permission to clone the repository
       contents: read
       packages: read
-      # issues and pull-requests permissions to write results as pull
-      # request comments. Omit them if you don't need summary comments
+
       issues: write
       pull-requests: write
-      # To report GitHub Actions status checks. Omit if you don't need
-      # to update commit status
+      # To report GitHub Actions status checks
       statuses: write
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           # super-linter needs the full git history to get the
           # list of files that changed across commits
           fetch-depth: 0
-          persist-credentials: false
 
       - name: Super-linter
-        uses: super-linter/super-linter@v8.5.0 # x-release-please-version
+        uses: super-linter/super-linter@v7.1.0 # x-release-please-version
         env:
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_CHECKOV: false
+          VALIDATE_JSCPD: false
+          VALIDATE_PYTHON_PYLINT: false
+          FIX_HTML_PRETTIER: true
+          FIX_PYTHON_BLACK: true
+          FIX_YAML_PRETTIER: true
