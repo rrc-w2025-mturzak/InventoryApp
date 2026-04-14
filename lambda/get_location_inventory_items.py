@@ -19,14 +19,23 @@ def lambda_handler(event, context):
     table = dynamodb.Table(TABLE_NAME)
 
     try:
-        # Use native int, not Decimal
         location_id = int(event["pathParameters"]["location_id"])
 
-        response = table.scan(
-            FilterExpression=Attr("location_id").eq(location_id)
-        )
+        items = []
+        scan_kwargs = {
+            "FilterExpression": Attr("location_id").eq(location_id)
+        }
 
-        items = convert_decimals(response.get("Items", []))
+        response = table.scan(**scan_kwargs)
+        items.extend(response.get("Items", []))
+
+        # Keep scanning until no more pages
+        while "LastEvaluatedKey" in response:
+            scan_kwargs["ExclusiveStartKey"] = response["LastEvaluatedKey"]
+            response = table.scan(**scan_kwargs)
+            items.extend(response.get("Items", []))
+
+        items = convert_decimals(items)
 
         return {
             "statusCode": 200,
