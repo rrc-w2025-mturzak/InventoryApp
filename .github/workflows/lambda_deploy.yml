@@ -17,6 +17,7 @@ jobs:
   deploy1:
     if: github.event_name == 'push' || github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -85,8 +86,10 @@ jobs:
         working-directory: ./lambda
 
   deploy2:
+    needs: deploy1   # <<< prevents AWS update conflicts
     if: github.event_name == 'push' || github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
