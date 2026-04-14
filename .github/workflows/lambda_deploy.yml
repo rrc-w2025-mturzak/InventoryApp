@@ -34,9 +34,16 @@ jobs:
       - name: Zip add_inventory_item Lambda
         run: zip function.zip add_inventory_item.py
         working-directory: ./lambda
+
       - name: Deploy add_inventory_item
-        run: aws lambda update-function-code --function-name add_inventory_item --zip-file fileb://function.zip --publish
+        run: |
+          for i in {1..5}; do
+            aws lambda update-function-code --function-name add_inventory_item --zip-file fileb://function.zip --publish && break
+            echo "Lambda busy, retrying in 5 seconds..."
+            sleep 5
+          done
         working-directory: ./lambda
+
       - name: Cleanup add_inventory_item zip
         run: rm function.zip
         working-directory: ./lambda
@@ -45,9 +52,16 @@ jobs:
       - name: Zip delete_inventory_item Lambda
         run: zip function.zip delete_inventory_item.py
         working-directory: ./lambda
+
       - name: Deploy delete_inventory_item
-        run: aws lambda update-function-code --function-name delete_inventory_item --zip-file fileb://function.zip --publish
+        run: |
+          for i in {1..5}; do
+            aws lambda update-function-code --function-name delete_inventory_item --zip-file fileb://function.zip --publish && break
+            echo "Lambda busy, retrying in 5 seconds..."
+            sleep 5
+          done
         working-directory: ./lambda
+
       - name: Cleanup delete_inventory_item zip
         run: rm function.zip
         working-directory: ./lambda
@@ -56,9 +70,16 @@ jobs:
       - name: Zip get_all_inventory_items Lambda
         run: zip function.zip get_all_inventory_items.py
         working-directory: ./lambda
+
       - name: Deploy get_all_inventory_items
-        run: aws lambda update-function-code --function-name get_all_inventory_items --zip-file fileb://function.zip --publish
+        run: |
+          for i in {1..5}; do
+            aws lambda update-function-code --function-name get_all_inventory_items --zip-file fileb://function.zip --publish && break
+            echo "Lambda busy, retrying in 5 seconds..."
+            sleep 5
+          done
         working-directory: ./lambda
+
       - name: Cleanup get_all_inventory_items zip
         run: rm function.zip
         working-directory: ./lambda
@@ -67,9 +88,16 @@ jobs:
       - name: Zip get_inventory_item Lambda
         run: zip function.zip get_inventory_item.py
         working-directory: ./lambda
+
       - name: Deploy get_inventory_item
-        run: aws lambda update-function-code --function-name get_inventory_item --zip-file fileb://function.zip --publish
+        run: |
+          for i in {1..5}; do
+            aws lambda update-function-code --function-name get_inventory_item --zip-file fileb://function.zip --publish && break
+            echo "Lambda busy, retrying in 5 seconds..."
+            sleep 5
+          done
         working-directory: ./lambda
+
       - name: Cleanup get_inventory_item zip
         run: rm function.zip
         working-directory: ./lambda
@@ -78,15 +106,22 @@ jobs:
       - name: Zip get_location_inventory_items Lambda
         run: zip function.zip get_location_inventory_items.py
         working-directory: ./lambda
+
       - name: Deploy get_location_inventory_items
-        run: aws lambda update-function-code --function-name get_location_inventory_items --zip-file fileb://function.zip --publish
+        run: |
+          for i in {1..5}; do
+            aws lambda update-function-code --function-name get_location_inventory_items --zip-file fileb://function.zip --publish && break
+            echo "Lambda busy, retrying in 5 seconds..."
+            sleep 5
+          done
         working-directory: ./lambda
+
       - name: Cleanup get_location_inventory_items zip
         run: rm function.zip
         working-directory: ./lambda
 
   deploy2:
-    needs: deploy1   # <<< prevents AWS update conflicts
+    needs: deploy1
     if: github.event_name == 'push' || github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
@@ -106,9 +141,16 @@ jobs:
       - name: Zip add_inventory_item Lambda
         run: zip function.zip add_inventory_item.py
         working-directory: ./lambda
+
       - name: Deploy add_inventory_item
-        run: aws lambda update-function-code --function-name add_inventory_item --zip-file fileb://function.zip --publish
+        run: |
+          for i in {1..5}; do
+            aws lambda update-function-code --function-name add_inventory_item --zip-file fileb://function.zip --publish && break
+            echo "Lambda busy, retrying in 5 seconds..."
+            sleep 5
+          done
         working-directory: ./lambda
+
       - name: Cleanup add_inventory_item zip
         run: rm function.zip
         working-directory: ./lambda
@@ -117,9 +159,16 @@ jobs:
       - name: Zip delete_inventory_item Lambda
         run: zip function.zip delete_inventory_item.py
         working-directory: ./lambda
+
       - name: Deploy delete_inventory_item
-        run: aws lambda update-function-code --function-name delete_inventory_item --zip-file fileb://function.zip --publish
+        run: |
+          for i in {1..5}; do
+            aws lambda update-function-code --function-name delete_inventory_item --zip-file fileb://function.zip --publish && break
+            echo "Lambda busy, retrying in 5 seconds..."
+            sleep 5
+          done
         working-directory: ./lambda
+
       - name: Cleanup delete_inventory_item zip
         run: rm function.zip
         working-directory: ./lambda
@@ -128,9 +177,16 @@ jobs:
       - name: Zip get_all_inventory_items Lambda
         run: zip function.zip get_all_inventory_items.py
         working-directory: ./lambda
+
       - name: Deploy get_all_inventory_items
-        run: aws lambda update-function-code --function-name get_all_inventory_items --zip-file fileb://function.zip --publish
+        run: |
+          for i in {1..5}; do
+            aws lambda update-function-code --function-name get_all_inventory_items --zip-file fileb://function.zip --publish && break
+            echo "Lambda busy, retrying in 5 seconds..."
+            sleep 5
+          done
         working-directory: ./lambda
+
       - name: Cleanup get_all_inventory_items zip
         run: rm function.zip
         working-directory: ./lambda
@@ -139,9 +195,16 @@ jobs:
       - name: Zip get_inventory_item Lambda
         run: zip function.zip get_inventory_item.py
         working-directory: ./lambda
+
       - name: Deploy get_inventory_item
-        run: aws lambda update-function-code --function-name get_inventory_item --zip-file fileb://function.zip --publish
+        run: |
+          for i in {1..5}; do
+            aws lambda update-function-code --function-name get_inventory_item --zip-file fileb://function.zip --publish && break
+            echo "Lambda busy, retrying in 5 seconds..."
+            sleep 5
+          done
         working-directory: ./lambda
+
       - name: Cleanup get_inventory_item zip
         run: rm function.zip
         working-directory: ./lambda
@@ -150,9 +213,16 @@ jobs:
       - name: Zip get_location_inventory_items Lambda
         run: zip function.zip get_location_inventory_items.py
         working-directory: ./lambda
+
       - name: Deploy get_location_inventory_items
-        run: aws lambda update-function-code --function-name get_location_inventory_items --zip-file fileb://function.zip --publish
+        run: |
+          for i in {1..5}; do
+            aws lambda update-function-code --function-name get_location_inventory_items --zip-file fileb://function.zip --publish && break
+            echo "Lambda busy, retrying in 5 seconds..."
+            sleep 5
+          done
         working-directory: ./lambda
+
       - name: Cleanup get_location_inventory_items zip
         run: rm function.zip
         working-directory: ./lambda
