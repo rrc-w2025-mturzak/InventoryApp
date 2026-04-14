@@ -1,13 +1,10 @@
 import json
-from decimal import Decimal
 import boto3
-
 
 def lambda_handler(event, context):
     dynamo_client = boto3.client("dynamodb")
     table_name = "Inventory"
 
-    # Validate path parameter
     if "pathParameters" not in event or "id" not in event["pathParameters"]:
         return {
             "statusCode": 400,
@@ -16,17 +13,20 @@ def lambda_handler(event, context):
 
     id_value = event["pathParameters"]["id"]
 
-    # Build key using only id
-    key = {"id": {"S": id_value}}
-
     try:
-        response = dynamo_client.get_item(TableName=table_name, Key=key)
-        item = response.get("Item")
+        response = dynamo_client.query(
+            TableName=table_name,
+            KeyConditionExpression="id = :id",
+            ExpressionAttributeValues={":id": {"S": id_value}}
+        )
 
-        if not item:
+        items = response.get("Items", [])
+
+        if not items:
             return {"statusCode": 404, "body": json.dumps("Item not found")}
 
-        return {"statusCode": 200, "body": json.dumps(item, default=str)}
+        # If you expect only one item, return the first
+        return {"statusCode": 200, "body": json.dumps(items[0], default=str)}
 
     except Exception as e:
         print(e)
