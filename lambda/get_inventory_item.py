@@ -1,6 +1,5 @@
 import json
 from decimal import Decimal
-
 import boto3
 
 
@@ -8,22 +7,17 @@ def lambda_handler(event, context):
     dynamo_client = boto3.client("dynamodb")
     table_name = "Inventory"
 
-    # Validate path parameters
-    if (
-        "pathParameters" not in event
-        or "id" not in event["pathParameters"]
-        or "location_id" not in event["pathParameters"]
-    ):
+    # Validate path parameter
+    if "pathParameters" not in event or "id" not in event["pathParameters"]:
         return {
             "statusCode": 400,
-            "body": json.dumps("Missing 'id' or 'location_id' path parameter"),
+            "body": json.dumps("Missing 'id' path parameter"),
         }
 
     id_value = event["pathParameters"]["id"]
-    location_id = Decimal(event["pathParameters"]["location_id"])
 
-    # Build the full composite key
-    key = {"id": {"S": id_value}, "location_id": {"N": str(location_id)}}
+    # Build key using only id
+    key = {"id": {"S": id_value}}
 
     try:
         response = dynamo_client.get_item(TableName=table_name, Key=key)
