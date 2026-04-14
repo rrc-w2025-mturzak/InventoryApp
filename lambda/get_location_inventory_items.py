@@ -19,8 +19,8 @@ def lambda_handler(event, context):
     table = dynamodb.Table(TABLE_NAME)
 
     try:
-        # Convert path param to Decimal to match DynamoDB type
-        location_id = Decimal(event["pathParameters"]["location_id"])
+        # Use native int, not Decimal
+        location_id = int(event["pathParameters"]["location_id"])
 
         response = table.scan(
             FilterExpression=Attr("location_id").eq(location_id)
